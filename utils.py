@@ -82,18 +82,17 @@ def load_dataset(m):
             human_vocab.update(tuple(h))
             machine_vocab.update(tuple(m))
 
-    print(machine_vocab, len(machine_vocab))
-
     dataset.sort(key= lambda x: len(x[0]))
+
+    human_special_tokens = [PAD_token, UNK_token]
+    machine_special_tokens = [PAD_token, SOS_token, EOS_token]
     
-    human = dict(zip([PAD_token, UNK_token] + sorted(human_vocab), 
-                     list(range(len(human_vocab) + 2))))
+    human = dict(zip(human_special_tokens + sorted(human_vocab), 
+                     list(range(len(human_vocab) + len(human_special_tokens)))))
     
-    machine = dict(zip([SOS_token, EOS_token] + sorted(machine_vocab),
-                    list(range(len(machine_vocab) + 2))))
-    
-    print(machine)
- 
+    machine = dict(zip(machine_special_tokens + sorted(machine_vocab),
+                    list(range(len(machine_vocab) + len(machine_special_tokens)))))
+     
     return dataset, human, machine
 
 

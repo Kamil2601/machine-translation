@@ -8,10 +8,11 @@ fake = Faker()
 Faker.seed(12345)
 random.seed(12345)
 
-SOS_token = '>'
-EOS_token = '<'
-UNK_token = '?'
-PAD_token = ';'
+class SpecialTokens:
+    SOS_token = '>'
+    EOS_token = '<'
+    UNK_token = '?'
+    PAD_token = ';'
 
 
 # Define format of the data we would like to generate
@@ -76,7 +77,7 @@ def load_dataset(m):
     for i in tqdm(range(m)):
         h, m, _ = load_date()
         m = m
-        sme = SOS_token + m + EOS_token
+        sme = SpecialTokens.SOS_token + m + SpecialTokens.EOS_token
         if h is not None:
             dataset.append((h, sme))
             human_vocab.update(tuple(h))
@@ -84,8 +85,8 @@ def load_dataset(m):
 
     dataset.sort(key= lambda x: len(x[0]))
 
-    human_special_tokens = [PAD_token, UNK_token]
-    machine_special_tokens = [PAD_token, SOS_token, EOS_token]
+    human_special_tokens = [SpecialTokens.PAD_token, SpecialTokens.UNK_token]
+    machine_special_tokens = [SpecialTokens.PAD_token, SpecialTokens.SOS_token, SpecialTokens.EOS_token]
     
     human = dict(zip(human_special_tokens + sorted(human_vocab), 
                      list(range(len(human_vocab) + len(human_special_tokens)))))
